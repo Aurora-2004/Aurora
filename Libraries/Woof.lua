@@ -856,3 +856,4 @@ function library:CreateTab(name)
 
   return modules
 end
+return library
