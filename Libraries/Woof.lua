@@ -1,4 +1,16 @@
 
+
+local GS = setmetatable({}, {
+  __index = function(self, index) 
+    return game.GetService(game, index)
+  end,
+  __call = function(self, index)
+    return game.GetService(game, index)
+  end
+})
+
+
+
 -- // UI
 local udim_new = UDim.new
 local udim2_new = UDim2.new
@@ -99,8 +111,6 @@ local drag = function(objDrag, objHold)
 end
 
 drag(Main, TextLabel)
-
-syn.protect_gui(WoofUI)
 
 WoofUI.Name = GS.HttpService:GenerateGUID(true)
 WoofUI.Parent = GS.CoreGui
@@ -846,4 +856,3 @@ function library:CreateTab(name)
 
   return modules
 end
-return library
