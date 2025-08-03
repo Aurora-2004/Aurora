@@ -1,5 +1,5 @@
 
-return = {
+return {
 
     ["Spawn"]           = CFrame.new(172.4, 3, 45),
     ["WoodRUs"]         = CFrame.new(250.868, 3, 57.6917),
