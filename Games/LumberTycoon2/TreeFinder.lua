@@ -1,5 +1,7 @@
 
-repeat task.wait() until game:IsLoaded()
+if not game:IsLoaded() then
+    game.IsLoaded:Wait()
+end
 
 --[[ Services ]]--
 
