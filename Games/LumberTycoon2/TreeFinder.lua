@@ -68,8 +68,6 @@ function Utility:GetTreeOfClass(TreeClasses)
     return false
 end
 
-print("Aurora on top")
-
 queue_on_teleport([[
     repeat task.wait() until game:IsLoaded()
     task.wait(5)
@@ -84,4 +82,5 @@ if SpookyTree then
     return
 end
 
+Utility:SendNotice("No Trees Found !")
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Modules/ServerHopper.lua"))()
