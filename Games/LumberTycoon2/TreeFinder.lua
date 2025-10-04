@@ -68,7 +68,7 @@ function Utility:GetTreeOfClass(TreeClasses)
     return false
 end
 
-print("Aurora")
+print("Aurora on top")
 
 queue_on_teleport([[
     repeat task.wait() until game:IsLoaded()
@@ -78,7 +78,7 @@ queue_on_teleport([[
 
 local SpookyTree = Utility:GetTreeOfClass({"Spooky", "SpookyNeon"})
 if SpookyTree then
-    local Message = string.format("%s found", SpookyTree.TreeClass.Value)
+    local Message = string.format("%s Tree Found", SpookyTree.TreeClass.Value)
     Utility:Teleport(CFrame.new(SpookyTree:GetPivot().p) + Vector3.new(5, 5, 0))
     Utility:SendNotice(Message)
     return
