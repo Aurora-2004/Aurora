@@ -1,5 +1,4 @@
 
-
 repeat task.wait() until game:IsLoaded()
 
 --[[ Services ]]--
@@ -45,11 +44,8 @@ function Utility:Teleport(Position)
 end
 
 function Utility:SendNotice(Message, Duriation)
-    local Data = {
-        Message   = Message or "",
-        Duriation = Duriation or 0
-    }
-    return SendUserNotice:Fire(table.unpack(Data))
+    local Message   = Message or ""
+    return SendUserNotice:Fire(Message, Duriation)
 end
 
 function Utility:CollectTreeRegions()
