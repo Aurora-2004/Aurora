@@ -68,6 +68,8 @@ function Utility:GetTreeOfClass(TreeClasses)
     return false
 end
 
+print("Aurora")
+
 queue_on_teleport([[
     repeat task.wait() until game:IsLoaded()
     task.wait(5)
@@ -82,4 +84,4 @@ if SpookyTree then
     return
 end
 
-loadstring(game:HttpGet"https://raw.githubusercontent.com/LeoKholYt/roblox/main/lk_serverhop.lua")():Teleport(game.PlaceId)
+loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Modules/ServerHopper.lua"))()
