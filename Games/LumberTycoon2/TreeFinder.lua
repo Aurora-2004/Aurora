@@ -60,11 +60,12 @@ function Utility:SendDiscordMessage(Tree, WebhookUrl)
 
     --// 100% stolen from Ivanos spook finder in 2022 \\--
     local url = WebhookUrl
-    local data = {["content"] = "",["embeds"] = {{["title"] = "Tree Found: "..TreeClass, ["type"] = "rich", ["color"] = tonumber(D3FFFF), ["fields"] = {{["name"] = "Game Link:", ["value"] = '```game:GetService("TeleportService"):TeleportToPlaceInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)```', ["inline"] = true},{["name"] = "Teleport Script:", ["value"] = "```game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new("..tostring(TreePosition)..")```",["inline"] = false},{["name"] = "Console Script:", ["value"] = '```Roblox.GameLauncher.joinGameInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '")```',["inline"] = false},},}}}
+    local data = {["content"] = "",["embeds"] = {{["title"] = "Tree Found: "..TreeClass, ["type"] = "rich", ["color"] = 0xD3FFFF, ["fields"] = {{["name"] = "Game Link:", ["value"] = '```game:GetService("TeleportService"):TeleportToPlaceInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)```', ["inline"] = true},{["name"] = "Teleport Script:", ["value"] = "```game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new("..tostring(TreePosition)..")```",["inline"] = false},{["name"] = "Console Script:", ["value"] = '```Roblox.GameLauncher.joinGameInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '")```',["inline"] = false},},}}}
     local headers = {["content-type"] = "application/json"}
     local spookyfinder = {Url = url, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = headers}
-        
-    Request(spookyfinder)
+
+    local Response = Request(spookyfinder)
+    print(Response or "invalid response")
 end
 
 function Utility:Drag(Object)
@@ -107,6 +108,7 @@ if SpookyTree then
     Utility:SendNotice(Message)
     if getgenv().WebHook then
         Utility:SendDiscordMessage(SpookyTree, getgenv().WebHook)
+        task.wait(1)
         loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Modules/ServerHopper.lua"))()
     end
     return
