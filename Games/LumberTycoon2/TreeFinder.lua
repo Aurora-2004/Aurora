@@ -50,6 +50,12 @@ function Utility:SendNotice(Message, Duriation)
     return SendUserNotice:Fire(Message, Duriation)
 end
 
+function Utility:Drag(Object)
+    for i = 1, 3 do
+        ClientIsDragging:FireServer(Object)
+    end
+end
+
 function Utility:CollectTreeRegions()
     for _, Region in next, workspace:GetChildren() do
         if Region.Name == "TreeRegion" then
@@ -72,7 +78,7 @@ end
 
 queue_on_teleport([[
     repeat task.wait() until game:IsLoaded()
-    task.wait(5)
+    task.wait(10)
     loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Games/LumberTycoon2/TreeFinder.lua"))()
 ]])
 
@@ -80,6 +86,7 @@ local SpookyTree = Utility:GetTreeOfClass({"Spooky", "SpookyNeon"})
 if SpookyTree then
     local Message = string.format("%s Tree Found", SpookyTree.TreeClass.Value)
     Utility:Teleport(CFrame.new(SpookyTree:GetPivot().p) + Vector3.new(5, 5, 0))
+    repeat task.wait() Utility:Drag(SpookyTree) until SpookyTree.Owner.Value == Player
     Utility:SendNotice(Message)
     return
 end
