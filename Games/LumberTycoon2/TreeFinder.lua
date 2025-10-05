@@ -106,6 +106,7 @@ if SpookyTree then
     Utility:Teleport(CFrame.new(SpookyTree:GetPivot().p) + Vector3.new(5, 5, 0))
     repeat task.wait() Utility:Drag(SpookyTree) until SpookyTree.Owner.Value == Player
     Utility:SendNotice(Message)
+    print(getgenv().WebHook)
     if getgenv().WebHook then
         Utility:SendDiscordMessage(SpookyTree, getgenv().WebHook)
         task.wait(1)
