@@ -1,4 +1,5 @@
 
+
 if not game:IsLoaded() then
     game.IsLoaded:Wait()
 end
@@ -47,7 +48,9 @@ end
 
 function Utility:SendNotice(Message, Duriation)
     local Message   = Message or ""
-    return SendUserNotice:Fire(Message, Duriation)
+    pcall(function()
+        SendUserNotice:Fire(Message, Duriation)
+    end)
 end
 
 function Utility:SendDiscordMessage(Tree, WebhookUrl)
@@ -57,7 +60,7 @@ function Utility:SendDiscordMessage(Tree, WebhookUrl)
 
     --// 100% stolen from Ivanos spook finder in 2022 \\--
     local url = WebhookUrl
-    local data = {["content"] = "@SpookPing",["embeds"] = {{["title"] = "Tree Found: "..TreeClass, ["type"] = "rich", ["color"] = tonumber(D3FFFF), ["fields"] = {{["name"] = "Game Link:", ["value"] = '```game:GetService("TeleportService"):TeleportToPlaceInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)```', ["inline"] = true},{["name"] = "Teleport Script:", ["value"] = "```game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new("..tostring(TreePosition)..")```",["inline"] = false},{["name"] = "Console Script:", ["value"] = '```Roblox.GameLauncher.joinGameInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '")```',["inline"] = false},},}}}
+    local data = {["content"] = "",["embeds"] = {{["title"] = "Tree Found: "..TreeClass, ["type"] = "rich", ["color"] = tonumber(D3FFFF), ["fields"] = {{["name"] = "Game Link:", ["value"] = '```game:GetService("TeleportService"):TeleportToPlaceInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)```', ["inline"] = true},{["name"] = "Teleport Script:", ["value"] = "```game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new("..tostring(TreePosition)..")```",["inline"] = false},{["name"] = "Console Script:", ["value"] = '```Roblox.GameLauncher.joinGameInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '")```',["inline"] = false},},}}}
     local headers = {["content-type"] = "application/json"}
     local spookyfinder = {Url = url, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = headers}
         
