@@ -50,6 +50,20 @@ function Utility:SendNotice(Message, Duriation)
     return SendUserNotice:Fire(Message, Duriation)
 end
 
+function Utility:SendDiscordMessage(Tree, WebhookUrl)
+    local TreeClass    = Tree:FindFirstChild("TreeClass").Value
+    local TreePosition = CFrame.new(Tree:FindFirstChild("WoodSection").CFrame.p)
+    local Request      = http_request or request or HttpPost
+
+    --// 100% stolen from Ivanos spook finder in 2022 \\--
+    local url = WebhookUrl
+    local data = {["content"] = "@SpookPing",["embeds"] = {{["title"] = "Tree Found: "..TreeClass, ["type"] = "rich", ["color"] = tonumber(D3FFFF), ["fields"] = {{["name"] = "Game Link:", ["value"] = '```game:GetService("TeleportService"):TeleportToPlaceInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '", game.Players.LocalPlayer)```', ["inline"] = true},{["name"] = "Teleport Script:", ["value"] = "```game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new("..tostring(TreePosition)..")```",["inline"] = false},{["name"] = "Console Script:", ["value"] = '```Roblox.GameLauncher.joinGameInstance(' ..game.PlaceId .. ', "' .. game.JobId .. '")```',["inline"] = false},},}}}
+    local headers = {["content-type"] = "application/json"}
+    local spookyfinder = {Url = url, Body = game:GetService("HttpService"):JSONEncode(data), Method = "POST", Headers = headers}
+        
+    Request(spookyfinder)
+end
+
 function Utility:Drag(Object)
     for i = 1, 3 do
         ClientIsDragging:FireServer(Object)
@@ -88,8 +102,14 @@ if SpookyTree then
     Utility:Teleport(CFrame.new(SpookyTree:GetPivot().p) + Vector3.new(5, 5, 0))
     repeat task.wait() Utility:Drag(SpookyTree) until SpookyTree.Owner.Value == Player
     Utility:SendNotice(Message)
+    if getgenv().WebHook then
+        Utility:SendDiscordMessage(SpookyTree, getgenv().WebHook)
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Modules/ServerHopper.lua"))()
+    end
     return
 end
 
 Utility:SendNotice("No Trees Found !")
 loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Aurora-2004/Aurora/refs/heads/main/Modules/ServerHopper.lua"))()
+
+print("TehSilent was here :)")
