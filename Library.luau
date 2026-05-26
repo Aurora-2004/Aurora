@@ -1,5 +1,7 @@
 
 
+
+
 if game:GetService("CoreGui"):FindFirstChild("UI") then
     local destroy = Instance.new("BoolValue")
     destroy.Name = "DestroyUi"
@@ -1077,7 +1079,7 @@ function library.CreateWindow(self, uiTitle)
           if inputType == Enum.UserInputType.MouseButton1 then
             toggleDropdown()
             SelectedOption.Text = tostring(optionName)
-            dropdownOptions.Callback(tostring(optionName))
+            dropdownOptions.Callback(optionName)
           end
         end))
       end
@@ -1180,5 +1182,4 @@ Tab:Dropdown({
     print(Player)
     end,
 })
-
-]]
+    ]]
