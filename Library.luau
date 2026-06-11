@@ -1119,6 +1119,8 @@ function library.CreateWindow(self, uiTitle)
       Label.TextSize = 16.000
       Label.TextXAlignment = Enum.TextXAlignment.Left
       Label.Text = " " ..Name
+
+        return Label
     end
     return tab
   end
