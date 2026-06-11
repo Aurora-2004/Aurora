@@ -690,7 +690,7 @@ function library.CreateWindow(self, uiTitle)
         if gameProcessed then return end
         if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
         if shortNames[input.KeyCode.Name] ~= bindName then return end
-        keybindOptions.Callback()
+        keybindOptions.Callback(input.KeyCode.Name)
       end))
     end
 
