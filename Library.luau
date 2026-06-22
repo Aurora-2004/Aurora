@@ -2,6 +2,9 @@
 
 
 
+
+
+
 if game:GetService("CoreGui"):FindFirstChild("UI") then
     local destroy = Instance.new("BoolValue")
     destroy.Name = "DestroyUi"
@@ -83,11 +86,14 @@ function library.Drag(self, objDrag, objHold)
 end
 
 function library.BindOnClick(self, instance, callback)
-  return instance.InputEnded:Connect(function(input)
-    if input.UserInputType ~= nil then
-      callback(input.UserInputType)
-    end
-  end)
+    return instance.InputEnded:Connect(function(input)
+        local inputType = input.UserInputType
+
+        if inputType == Enum.UserInputType.MouseButton1
+        or inputType == Enum.UserInputType.Touch then
+            callback(inputType)
+        end
+    end)
 end
 
 local Library = {}
@@ -1181,7 +1187,7 @@ Tab:Dropdown({
     Name = "Dropdown",
     Options = game.Players:GetPlayers(),
     Callback = function(Player)
-    print(Player)
+        print(Player)
     end,
 })
-    ]]
+]]
