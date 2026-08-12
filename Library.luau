@@ -1,10 +1,5 @@
 
 
-
-
-
-
-
 if game:GetService("CoreGui"):FindFirstChild("UI") then
     local destroy = Instance.new("BoolValue")
     destroy.Name = "DestroyUi"
@@ -89,8 +84,7 @@ function library.BindOnClick(self, instance, callback)
     return instance.InputEnded:Connect(function(input)
         local inputType = input.UserInputType
 
-        if inputType == Enum.UserInputType.MouseButton1
-        or inputType == Enum.UserInputType.Touch then
+        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
             callback(inputType)
         end
     end)
@@ -281,7 +275,7 @@ function library.CreateWindow(self, uiTitle)
   end))
   
   table.insert(library.connections, library:BindOnClick(Close, function(inputType)
-    if inputType == Enum.UserInputType.MouseButton1 then
+    if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
       library:Destroy()
     end
   end))
@@ -304,7 +298,7 @@ function library.CreateWindow(self, uiTitle)
     })
   end
   table.insert(library.connections, library:BindOnClick(ToggleSide, function(inputType)
-    if inputType == Enum.UserInputType.MouseButton1 then
+    if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
       toggleSide()
     end
   end))
@@ -366,7 +360,7 @@ function library.CreateWindow(self, uiTitle)
     TabPadding.PaddingTop = UDim.new(0, 8)
     
     table.insert(library.connections, library:BindOnClick(TabBtn, function(inputType)
-      if inputType == Enum.UserInputType.MouseButton1 then
+      if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
         library:SwitchTab({ Tab, TabBtn })
         toggleSide()
       end
@@ -419,7 +413,7 @@ function library.CreateWindow(self, uiTitle)
       ButtonText.TextXAlignment = Enum.TextXAlignment.Left      
       
       table.insert(library.connections, library:BindOnClick(ButtonModule, function(inputType)
-        if inputType == Enum.UserInputType.MouseButton1 then
+        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
           buttonOptions.Callback()
         elseif buttonOptions.Callback2 and inputType == Enum.UserInputType.MouseButton2 then
           buttonOptions.Callback2()
@@ -487,7 +481,7 @@ function library.CreateWindow(self, uiTitle)
       local ToggleOpenPosition, ToggleOpenColor = udim2_new(1, -26, 0, 0), color3_rgb(69, 255, 168)
 
       table.insert(library.connections, library:BindOnClick(ToggleModule, function(inputType)
-        if inputType == Enum.UserInputType.MouseButton1 then
+        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
           toggleFunctions:SetState()
         end
       end))
@@ -674,7 +668,7 @@ function library.CreateWindow(self, uiTitle)
       KeybindValue.TextSize = 14.000  
       
       table.insert(library.connections, library:BindOnClick(KeybindValue, function(inputType)
-        if inputType == Enum.UserInputType.MouseButton1 then
+        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
           KeybindValue.Text = "..."
           task.wait()
           local key = game:GetService("UserInputService").InputEnded:Wait()
@@ -1040,7 +1034,7 @@ function library.CreateWindow(self, uiTitle)
       end
 
       table.insert(library.connections, library:BindOnClick(DropdownToggle, function(inputType)
-        if inputType == Enum.UserInputType.MouseButton1 then
+        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
           toggleDropdown()
         end
       end))
@@ -1082,7 +1076,7 @@ function library.CreateWindow(self, uiTitle)
         DropdownOptionText.TextSize = 16.000
 
         table.insert(library.connections, library:BindOnClick(DropdownOption, function(inputType)
-          if inputType == Enum.UserInputType.MouseButton1 then
+          if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
             toggleDropdown()
             SelectedOption.Text = tostring(optionName)
             dropdownOptions.Callback(optionName)
