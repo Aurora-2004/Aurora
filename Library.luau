@@ -1,5 +1,5 @@
 
-
+local Dev = false
 if game:GetService("CoreGui"):FindFirstChild("UI") then
     local destroy = Instance.new("BoolValue")
     destroy.Name = "DestroyUi"
@@ -13,8 +13,10 @@ library.destroyed = false
 local instance_new = Instance.new
 local udim2_new = UDim2.new
 local color3_rgb = Color3.fromRGB
-local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+local players = game:GetService("Players")
+local mouse = players.LocalPlayer:GetMouse()
 local tween_service = game:GetService("TweenService")
+local user_input_service = game:GetService("UserInputService")
 
 function library.Tween(self, instance, time, properties, onComplete)
   local Tween = tween_service:Create(instance, TweenInfo.new(time, Enum.EasingStyle.Sine, Enum.EasingDirection.In), properties)
@@ -73,7 +75,7 @@ function library.Drag(self, objDrag, objHold)
     end
   end)
 
-  game:GetService("UserInputService").InputChanged:Connect(function(input)
+  user_input_service.InputChanged:Connect(function(input)
     if input == dragInput and dragging then
       update(input)
     end
@@ -91,6 +93,24 @@ function library.BindOnClick(self, instance, callback)
 end
 
 local Library = {}
+
+library.Players = {}
+
+for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+	table.insert(library.Players, player)
+end
+
+players.PlayerAdded:Connect(function(player)
+	table.insert(library.Players, player)
+end)
+
+players.PlayerRemoving:Connect(function(player)
+	local index = table.find(library.Players, player)
+
+	if index then
+		table.remove(library.Players, index)
+	end
+end)
 
 function library.CreateWindow(self, uiTitle)
   local UI = instance_new("ScreenGui")
@@ -269,6 +289,38 @@ function library.CreateWindow(self, uiTitle)
   DropShadow.ImageTransparency = 0.500
   DropShadow.ScaleType = Enum.ScaleType.Slice
   DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
+
+  if Dev or user_input_service.TouchEnabled
+	and not user_input_service.KeyboardEnabled
+	and not user_input_service.MouseEnabled then
+
+    local MobileGui = Instance.new("ScreenGui")
+	MobileGui.Name = "MobileToggle"
+	MobileGui.ResetOnSpawn = false
+	MobileGui.DisplayOrder = 999
+	MobileGui.Parent = players.LocalPlayer:WaitForChild("PlayerGui")
+
+	local Toggle = Instance.new("TextButton")
+	Toggle.Name = "ToggleButton"
+	Toggle.Size = UDim2.fromOffset(50, 50)
+	Toggle.Position = UDim2.new(0, 10, 0.5, 0)
+	Toggle.AnchorPoint = Vector2.new(0, 0.5)
+	Toggle.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Toggle.Text = "UI"
+	Toggle.TextSize = 16
+	Toggle.Font = Enum.Font.GothamBold
+	Toggle.Parent = MobileGui
+
+	local Corner = Instance.new("UICorner")
+	Corner.CornerRadius = UDim.new(0, 10)
+	Corner.Parent = Toggle
+
+	Toggle.Activated:Connect(function()
+        UI.Enabled = not UI.Enabled
+		Toggle.Text = library.Enabled and "X" or "UI"
+	end)
+end
 
   table.insert(library.connections, Sidebar.ChildAdded:Connect(function()
     Sidebar.CanvasSize = udim2_new(1, 0, 0, ((#Sidebar:GetChildren() - 2) * 38) + 8)
@@ -1179,7 +1231,7 @@ Tab:Slider({
 
 Tab:Dropdown({
     Name = "Dropdown",
-    Options = game.Players:GetPlayers(),
+    Options = library.Players,
     Callback = function(Player)
         print(Player)
     end,
