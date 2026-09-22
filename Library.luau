@@ -83,10 +83,26 @@ function library.Drag(self, objDrag, objHold)
 end
 
 function library.BindOnClick(self, instance, callback)
+    local TouchStartPosition
+
     return instance.InputEnded:Connect(function(input)
         local inputType = input.UserInputType
 
-        if inputType == Enum.UserInputType.MouseButton1 or inputType == Enum.UserInputType.Touch then
+        if inputType == Enum.UserInputType.Touch then
+            if not TouchStartPosition then
+                return
+            end
+
+            local Distance = (input.Position - TouchStartPosition).Magnitude
+            TouchStartPosition = nil
+
+            if Distance > 10 then
+                return
+            end
+
+            callback(inputType)
+
+        elseif inputType == Enum.UserInputType.MouseButton1 then
             callback(inputType)
         end
     end)
