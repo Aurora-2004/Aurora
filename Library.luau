@@ -85,7 +85,13 @@ end
 function library.BindOnClick(self, instance, callback)
     local TouchStartPosition
 
-    return instance.InputEnded:Connect(function(input)
+    local Began = instance.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            TouchStartPosition = input.Position
+        end
+    end)
+
+    local Ended = instance.InputEnded:Connect(function(input)
         local inputType = input.UserInputType
 
         if inputType == Enum.UserInputType.Touch then
@@ -96,6 +102,7 @@ function library.BindOnClick(self, instance, callback)
             local Distance = (input.Position - TouchStartPosition).Magnitude
             TouchStartPosition = nil
 
+            -- Finger moved, so this was probably a scroll rather than a click
             if Distance > 10 then
                 return
             end
@@ -106,6 +113,8 @@ function library.BindOnClick(self, instance, callback)
             callback(inputType)
         end
     end)
+
+    return Ended
 end
 
 local Library = {}
