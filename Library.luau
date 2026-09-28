@@ -45,42 +45,55 @@ function library.SwitchTab(self, new)
 end
 
 function library.Drag(self, objDrag, objHold)
-  if not objHold then objHold = objDrag end
-  local dragging
-  local dragInput
-  local dragStart
-  local startPos
+	if not objHold then
+		objHold = objDrag
+	end
 
-  local function update(input)
-    local delta = input.Position - dragStart
-    objDrag.Position = udim2_new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-  end
+	local dragging
+	local dragInput
+	local dragStart
+	local startPos
 
-  objHold.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-      dragging = true
-      dragStart = input.Position
-      startPos = objDrag.Position
-          
-      input.Changed:Connect(function()
-        if input.UserInputState == Enum.UserInputState.End then
-          dragging = false
-        end
-      end)
-    end
-  end)
+	local function update(input)
+		local delta = input.Position - dragStart
 
-  objDrag.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement then
-      dragInput = input
-    end
-  end)
+		objDrag.Position = udim2_new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
 
-  user_input_service.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-      update(input)
-    end
-  end)
+	objHold.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch then
+
+			dragging = true
+			dragStart = input.Position
+			startPos = objDrag.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	objHold.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch then
+
+			dragInput = input
+		end
+	end)
+
+	user_input_service.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			update(input)
+		end
+	end)
 end
 
 function library.BindOnClick(self, instance, callback)
