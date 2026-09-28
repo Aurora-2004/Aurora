@@ -362,7 +362,11 @@ function library.CreateWindow(self, uiTitle)
     library:Drag(Toggle)
 
 	Toggle.Activated:Connect(function()
-        UI.Enabled = not UI.Enabled
+        if UI.Enabled then
+          UI.Enabled = false
+        else
+            UI.Enabled = true
+        end
 		Toggle.Text = library.Enabled and "X" or "UI"
 	end)
 end
