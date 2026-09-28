@@ -1,4 +1,5 @@
 
+
 local Dev = false
 if game:GetService("CoreGui"):FindFirstChild("UI") then
     local destroy = Instance.new("BoolValue")
@@ -315,6 +316,10 @@ function library.CreateWindow(self, uiTitle)
   DropShadow.ScaleType = Enum.ScaleType.Slice
   DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
 
+  local Scale = Instance.new("UIScale")
+  Scale.Scale = user_input_service.TouchEnabled and 0.5 or 1
+  Scale.Parent = UI
+
   if Dev or user_input_service.TouchEnabled
 	and not user_input_service.KeyboardEnabled
 	and not user_input_service.MouseEnabled then
@@ -332,7 +337,7 @@ function library.CreateWindow(self, uiTitle)
 	Toggle.AnchorPoint = Vector2.new(0, 0.5)
 	Toggle.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 	Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-	Toggle.Text = "UI"
+	Toggle.Text = "X"
 	Toggle.TextSize = 16
 	Toggle.Font = Enum.Font.GothamBold
 	Toggle.Parent = MobileGui
@@ -425,6 +430,7 @@ end
     Tab.Size = udim2_new(0, 559, 0, 312)
     Tab.ScrollBarThickness = 2
     Tab.Visible = false
+    Tab.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
     TabListLayout.Name = "TabListLayout"
     TabListLayout.Parent = Tab
@@ -660,6 +666,18 @@ end
     end
 
     function tab.Keybind(self, keybindOptions)
+      
+      if user_input_service.TouchEnabled or Dev then
+        tab.Toggle(self, {
+
+            Name     = keybindOptions.Name,
+            State    = false,
+            Callback = keybindOptions.Callback,
+
+        })
+        return
+      end
+
       assert(keybindOptions.Name, "Missing argument 'Name' from keybindOptions")
       assert(keybindOptions.Default, "Missing argument 'Default' from keybindOptions")
       local default = (type(keybindOptions.Default) == "string" and Enum.KeyCode[keybindOptions.Default] or keybindOptions.Default)
@@ -904,26 +922,31 @@ end
       table.insert(library.connections, SliderValue.FocusLost:Connect(function ()
         boxFocused = false
         if SliderValue.Text == "" then
-          library.flags[flag]:SetValue(sliderOptions.Default or sliderOptions.Min)
+          sliderFunctions:SetValue(sliderOptions.Default or sliderOptions.Min)
         end
       end))
       
-      table.insert(library.connections, SliderValue:GetPropertyChangedSignal("Text"):Connect(function()
+    table.insert(library.connections, SliderValue:GetPropertyChangedSignal("Text"):Connect(function()
         if not boxFocused then return end
+
         SliderValue.Text = SliderValue.Text:gsub("%D+", "")
-        
+
         local text = SliderValue.Text
-        
-        if not tonumber(text) then
-          SliderValue.Text = SliderValue.Text:gsub('%D+', '')
-        elseif not allowed[text] then
-          if tonumber(text) > sliderOptions.Max then
-            text = sliderOptions.Max
-            SliderValue.Text = tostring(sliderOptions.Max)
-          end
-          sliderFunctions:SetValue(tonumber(text))
+        local number = tonumber(text)
+
+        if not number then
+            return
         end
-      end))
+
+        if allowed and not allowed[text] then
+            if number > sliderOptions.Max then
+                number = sliderOptions.Max
+                SliderValue.Text = tostring(number)
+            end
+
+            sliderFunctions:SetValue(number)
+        end
+    end))
       
       return sliderFunctions
     end
@@ -1050,6 +1073,8 @@ end
       DropdownOptionsPadding.Parent = DropdownOptions
       DropdownOptionsPadding.PaddingTop = UDim.new(0, 8)
 
+      local dropdownFunctions = {}
+
       local dropdownOpen = false
 
       local setAllVisible = function()
@@ -1098,6 +1123,7 @@ end
         DropdownToggle.Text = (dropdownOpen and "-" or "+")
         if dropdownOpen then
           DropdownBottom.Visible = true
+          dropdownFunctions:SetOptions((dropdownOptions.Options == "Players" and library.Players) or dropdownOptions.Options)
           resize()
           setAllVisible()
         else
@@ -1124,7 +1150,6 @@ end
         searchDropdown(SelectedOption.Text)
       end)      
 
-      local dropdownFunctions = {}
       function dropdownFunctions.AddOption(self, optionName)
         local DropdownOption = instance_new("Frame")
         local DropdownOptionCorner = instance_new("UICorner")
@@ -1176,7 +1201,7 @@ end
         end
       end
 
-      dropdownFunctions:SetOptions(dropdownOptions.Options)
+      dropdownFunctions:SetOptions((dropdownOptions.Options == "Players" and library.Players) or dropdownOptions.Options)
       
       return dropdownFunctions
     end
@@ -1197,7 +1222,7 @@ end
       Label.TextXAlignment = Enum.TextXAlignment.Left
       Label.Text = " " ..Name
 
-        return Label
+      return Label
     end
     return tab
   end
@@ -1206,6 +1231,7 @@ end
 return library
 
 --[[
+
 local UI = library:CreateWindow("Silent | 🌳")
 
 local Tab = UI:CreateTab({
@@ -1261,4 +1287,5 @@ Tab:Dropdown({
         print(Player)
     end,
 })
+
 ]]
