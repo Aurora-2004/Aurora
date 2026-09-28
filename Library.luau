@@ -317,7 +317,7 @@ function library.CreateWindow(self, uiTitle)
   DropShadow.SliceCenter = Rect.new(49, 49, 450, 450)
 
   local Scale = Instance.new("UIScale")
-  Scale.Scale = user_input_service.TouchEnabled and 0.5 or 1
+  Scale.Scale = user_input_service.TouchEnabled and 0.8 or 1
   Scale.Parent = UI
 
   if Dev or user_input_service.TouchEnabled
@@ -345,6 +345,8 @@ function library.CreateWindow(self, uiTitle)
 	local Corner = Instance.new("UICorner")
 	Corner.CornerRadius = UDim.new(0, 10)
 	Corner.Parent = Toggle
+
+    library:Drag(Toggle)
 
 	Toggle.Activated:Connect(function()
         UI.Enabled = not UI.Enabled
