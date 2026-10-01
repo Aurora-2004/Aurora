@@ -686,7 +686,7 @@ end
 
     function tab.Keybind(self, keybindOptions)
       
-      if user_input_service.TouchEnabled or Dev then
+      if user_input_service.TouchEnabled and not user_input_service.KeyboardEnabled then
         tab.Toggle(self, {
 
             Name     = keybindOptions.Name,
